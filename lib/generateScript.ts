@@ -1,10 +1,18 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPEN_API_KEY,
-});
+// Removi a inicialização global para evitar erro no build da Vercel
+export async function generateCarouselScript(newsBlock: string) {
+  const apiKey = process.env.OPEN_API_KEY || process.env.OPENAI_API_KEY;
 
-const SYSTEM_PROMPT = `Aja como um Copywriter Sênior, Estrategista de Negócios e Especialista em Automação para PMEs brasileiras. Você opera como um agente autônomo de pesquisa e criação de roteiros.
+  if (!apiKey) {
+    throw new Error("API Key da OpenAI não encontrada. Verifique as variáveis de ambiente na Vercel.");
+  }
+
+  const openai = new OpenAI({
+    apiKey: apiKey,
+  });
+
+  const SYSTEM_PROMPT = `Aja como um Copywriter Sênior, Estrategista de Negócios e Especialista em Automação para PMEs brasileiras. Você opera como um agente autônomo de pesquisa e criação de roteiros.
 
 **Objetivo:**
 Pesquisar na web por histórias famosas de grandes marcas, cultura pop, eventos históricos de tecnologia, escândalos corporativos ou viradas de mercado (ex: Netflix vs Blockbuster, estratégia da Disney, bastidores da Apple/OpenAI) e transformar isso em um roteiro de carrossel para Instagram. O objetivo final é vender suas soluções de automação com IA (WhatsApp/Instagram, Mercado Livre, Shopee, agentes e funis).
@@ -26,7 +34,7 @@ Você deve fundir 4 pilares na sua escrita:
 2. Analise internamente: Como a moral dessa história se aplica à falta de automação do pequeno empresário brasileiro?
 
 **Fluxo Narrativo do Carrossel (Tamanho Flexível):**
-Adapte o número de slides conforme a profundidade da notícia (idealmente entre 5 e 10 slides). Divida o conteúdo respeitando obrigatoriamente a seguinte jornada lógica:
+Adapte o numero de slides conforme a profundidade da notícia (idealmente entre 5 e 10 slides). Divida o conteúdo respeitando obrigatoriamente a seguinte jornada lógica:
 * **Fase 1: O Cavalo de Troia (Gancho):** Comece com um fato chocante, número ou curiosidade sobre a história.
 * **Fase 2: O Segredo (Análise):** Mostre os dados ou a estratégia oculta que fez essa história acontecer.
 * **Fase 3: A Ponte Empática:** Traga a lição da história para a realidade do BR (ex: o empresário que trabalha 14h por dia no manual).
@@ -49,7 +57,6 @@ Nesta seção, escreva um prompt em INGLÊS pronto para ser usado em um gerador 
 
 Respire fundo e produza o melhor material possível focando em retenção e conversão.`;
 
-export async function generateCarouselScript(newsBlock: string) {
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
