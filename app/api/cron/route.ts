@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
   try {
     console.log("Iniciando Cron Job: Busca de notícias...");
     const news = await fetchTopNews();
+    console.log("CONTEÚDO DAS NOTÍCIAS:", news);
 
     console.log("Gerando opções de temas com GPT-4o...");
     const options = await generateCarouselOptions(news);
