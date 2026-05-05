@@ -3,6 +3,8 @@ import { fetchTopNews } from "@/lib/fetchNews";
 import { generateCarouselScript } from "@/lib/generateScript";
 import { sendToWebhook } from "@/lib/sendWebhook";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   // 1. Verificação de Segurança (Bearer Token)
   const authHeader = request.headers.get("authorization");
