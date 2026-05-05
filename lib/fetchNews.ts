@@ -1,6 +1,6 @@
 export async function fetchTopNews() {
   const apiKey = process.env.NEWS_API_KEY;
-  const url = `https://newsapi.org/v2/top-headlines?category=technology&language=en&pageSize=5&apiKey=${apiKey}`;
+  const url = `https://newsapi.org/v2/top-headlines?category=technology&language=pt&pageSize=5&apiKey=${apiKey}`;
 
   try {
     const response = await fetch(url, { next: { revalidate: 0 } });

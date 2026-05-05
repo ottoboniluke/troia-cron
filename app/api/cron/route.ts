@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchTopNews } from "@/lib/fetchNews";
-import { generateCarouselScript } from "@/lib/generateScript";
+import { generateCarouselOptions } from "@/lib/generateScript";
 import { sendToWebhook } from "@/lib/sendWebhook";
 
 export const dynamic = 'force-dynamic';
@@ -16,11 +16,11 @@ export async function GET(request: NextRequest) {
     console.log("Iniciando Cron Job: Busca de notícias...");
     const news = await fetchTopNews();
 
-    console.log("Gerando roteiro com GPT-4o...");
-    const script = await generateCarouselScript(news);
+    console.log("Gerando opções de temas com GPT-4o...");
+    const options = await generateCarouselOptions(news);
 
-    console.log("Enviando para o Webhook...");
-    await sendToWebhook(script);
+    console.log("Enviando opções para o Webhook...");
+    await sendToWebhook(options);
 
     console.log("Processo concluído com sucesso!");
 
